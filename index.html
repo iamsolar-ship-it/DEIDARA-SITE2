@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deidara — The Art Is an Explosion</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"> <!-- Added for premium font -->
+  <style>
+    :root {
+      --bg-dark: rgba(20, 20, 20, 0.5); /* Lighter and more transparent */
+      --bg-panel: rgba(30, 30, 30, 0.6); /* Even more glass-like */
+      --accent: #00D4FF; /* Aqua replacing red */
+      --accent-soft: #7FFFD4; /* Lighter aqua for soft accents */
+      --text-main: #f1f1f1;
+      --text-muted: rgba(255, 255, 255, 0.9); /* Slightly brighter for readability */
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Oswald', sans-serif;
+      /* Removed radial-gradient intro background */
+      color: var(--text-main);
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: rgba(0, 0, 0, 0.4); /* More transparent */
+      backdrop-filter: blur(15px); /* Increased blur for premium effect */
+      border-bottom: 1px solid rgba(0, 212, 255, 0.3); /* Subtle aqua accent for premium */
+    }
+    nav span {
+      color: var(--accent);
+      font-weight: 600;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    nav span:hover { color: var(--accent-soft); text-shadow: 0 0 8px var(--accent-soft); }
+    nav a { color: var(--text-muted); margin-left: 1.5rem; text-decoration: none; }
+    nav a:hover { color: var(--accent-soft); text-shadow: 0 0 8px var(--accent-soft); }
+
+    #itachi-label {
+      position: fixed;
+      bottom: 1rem;
+      right: 2rem;
+      color: rgba(0, 212, 170, 0.6); /* Aqua-green with transparency for watermark effect */
+      font-size: 1.25rem; /* Smaller for subtle watermark */
+      font-weight: 400;
+      letter-spacing: 1px;
+      text-shadow: 0 0 5px rgba(0, 212, 170, 0.4); /* Subtle glow */
+      opacity: 1.2; /* Semi-transparent */
+      pointer-events: none; /* No interaction */
+      z-index: 999;
+      transform: rotate 0; /* Slight tilt for watermark flair */
+    }
+
+    header {
+      min-height: 100vh;
+      padding: 6rem 4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+    header h1 { font-size: 4rem; letter-spacing: 3px; color: var(--accent-soft); }
+    header p { max-width: 600px; color: var(--text-muted); margin-top: 1rem; font-size: 1.2rem; }
+
+    section {
+      padding: 2rem 10%; /* Reduced padding to minimize space */
+      /* Removed background for clean integration */
+    }
+    .panel {
+      /* Removed background, border, and box-shadow for seamless text integration */
+      padding: 1rem 0; /* Further reduced padding */
+      margin-bottom: 1rem; /* Reduced margin */
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    .panel.reveal { animation: fadeUp 1s ease forwards; }
+
+    h2 { font-size: 2.5rem; color: var(--accent-soft); }
+    li { color: var(--text-muted); }
+
+    .attacks { display: grid; gap: 2rem; margin-top: 3rem; }
+    .attack-card {
+      position: relative;
+      overflow: hidden;
+      padding: 3rem 3rem 3rem 7rem;
+      border-left: 6px solid var(--accent);
+      background: linear-gradient(135deg, rgba(30, 0, 0, 0.6), rgba(0, 212, 255, 0.1)); /* Darker background */
+      cursor: pointer;
+      backdrop-filter: blur(10px); /* Enhanced glass effect */
+      border-radius: 15px; /* More rounded for premium */
+      aspect-ratio: 32 / 9;
+      height: auto;
+      border: 1px solid rgba(0, 212, 255, 0.3); /* Aqua border */
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2); /* Slightly brighter shadow */
+    }
+    .attack-card h3 {
+      font-family: 'Playfair Display', serif; /* Premium serif font for C1, C2, etc. */
+      font-weight: 700; /* Bold for premium */
+      font-size: 1.8rem;
+      color: var(--accent-soft);
+      margin: 0;
+      text-shadow: 0 0 10px rgba(0, 212, 255, 0.5); /* Subtle glow for premium effect */
+    }
+    .attack-card p {
+      color: var(--text-muted);
+      margin: 0.5rem 0 0 0;
+    }
+    .attack-card img {
+      position: absolute;
+      left: 1.5rem;
+      top: 50%;
+      width: 130px;
+      transform: translateY(-50%) scale(0.7);
+      opacity: 0.05; /* Even more subtle */
+      filter: brightness(0.7) drop-shadow(0 0 25px rgba(0, 212, 255, 0.9)); /* Darker images with aqua glow */
+      transition: 0.1s; /* Super fast transition */
+    }
+    .attack-card:hover img { opacity: 1; transform: translateY(-50%) scale(1); }
+
+    .attack-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0;
+      transform: scale(0.6);
+      transition: transform 0.45s ease-out, opacity 0.40s ease-out;
+      mix-blend-mode: screen;
+      filter: brightness(0.75) contrast(1.2);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .attack-card:hover::before { opacity: 1; transform: scale(1.2); }
+
+    /* Specific attack backgrounds with linear gradient filling box ends */
+    .attack-card[data-attack="c1"]::before {
+      background: ("deidara c1.gif") center/cover no-repeat, linear-gradient(135deg, rgba(0, 212, 255, 0.3), transparent);
+    }
+    .attack-card[data-attack="c2"]::before {
+      background: ("deidara c2.gif") center/cover no-repeat, linear-gradient(135deg, rgba(0, 212, 255, 0.3), transparent);
+    }
+    .attack-card[data-attack="c3"]::before {
+      background: ("deidara c3.gif") center/cover no-repeat, linear-gradient(135deg, rgba(0, 212, 255, 0.3), transparent);
+    }
+    .attack-card[data-attack="c4"]::before {
+      background: ("deidara c4.gif") center/cover no-repeat, linear-gradient(135deg, rgba(0, 212, 255, 0.3), transparent);
+    }
+
+    .attack-card::after {
+      content: '';
+      position: absolute;
+      inset: -70%;
+      background: conic-gradient(from 0deg, transparent, rgba(0, 212, 255, 0.5), transparent); /* Aqua effect */
+      opacity: 0;
+    }
+    .attack-card:hover::after { animation: blastSpin 0.6s linear; }
+
+    .quote {
+      text-align: center;
+      padding: 10rem;
+      background: linear-gradient(145deg, rgba(40, 0, 0, 0.4), rgba(0, 212, 255, 0.1)); /* Aqua-tinted */
+      font-size: 1.6rem;
+      color: var(--accent-soft);
+      backdrop-filter: blur(12px); /* More blur */
+      border-radius: 10px;
+      border: 1px solid rgba(0, 212, 255, 0.2); /* Aqua border */
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(0, 0, 0, 0.5); /* More transparent */
+      color: #666; /* Original color */
+      backdrop-filter: blur(10px); /* Subtle blur */
+      border-top: 1px solid rgba(0, 212, 255, 0.3); /* Aqua accent */
+      font-family: 'Oswald', sans-serif; /* Exact font */
+    }
+
+    .attack-card::marker { display: none; }
+
+    @keyframes blastSpin { from { transform: rotate(0deg); opacity: 1; } to { transform: rotate(360deg); opacity: 0; } }
+    @keyframes fadeUp { to { opacity: 1; transform: none; } }
+
+    @media (max-width: 768px) {
+      header h1 { font-size: 2.5rem; }
+      section { padding: 4rem 7%; }
+    }
+
+    .bg-fixed {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(
+          rgba(0, 0, 0, 0.3), /* Much lighter overlay */
+          rgba(0, 0, 0, 0.4)
+        ),
+        url('https://wallpapercave.com/wp/wp12293805.jpg') center / cover no-repeat;
+    }
+  </style>
+</head>
+<body>
+<div class="bg-fixed"></div>
+<nav>
+  <span id="home-btn">DEIDARA</span>
+  <div>
+    <a href="#identity">Identity</a>
+    <a href="#art">Art</a>
+    <a href="#philosophy">Philosophy</a>
+    <a href="#legacy">Legacy</a>
+  </div>
+</nav>
+
+<header>
+  <h1>DEIDARA</h1>
+
+  <p class="hero-sub">
+    An Akatsuki artist who believed beauty exists only in the moment of destruction.
+  </p>
+
+  <p class="hero-desc">
+    A former shinobi of Iwagakure, Deidara wielded explosive clay techniques,
+    treating battle as performance art. To him, true beauty was fleeting —
+    born in chaos and erased in an instant.
+  </p>
+</header>
+
+<section id="identity">
+  <div class="panel">
+    <h2>Identity</h2>
+    <p>Deidara, an S-rank missing-nin from Iwagakure, is a master of explosive clay techniques. He views explosions as the ultimate art form, fleeting and destructive. With his unique dialect and rivalry with Sasuke, Deidara embodies eccentricity and philosophical depth in the Akatsuki. Born with a natural talent for sculpting, Deidara defected from his village after clashing with its traditional values, seeking freedom to express his art through chaos. His mouth on his palm allows him to infuse chakra into clay, creating living sculptures that explode on command. Known for his arrogance and obsession with "true art," Deidara often refers to himself in third person and ends sentences with "un" or "dattebayo" variations, adding to his flamboyant personality. As a member of the Akatsuki, he partnered with Sasori, forming a duo that combined explosive power with puppet mastery, though their partnership was often tense due to differing views on art.</p>
+    <br>
+    <p><strong>Key Traits:</strong></p>
+    <ul>
+      <li>Arrogant and flamboyant, often boasting about his art.</li>
+      <li>Philosophical outlook: Believes true beauty is ephemeral and destructive.</li>
+      <li>Unique ability: Mouth on palm for chakra-infused clay creations.</li>
+      <li>Rivalry with Sasuke Uchiha, clashing over ideals of art vs. power.</li>
+      <li>Defected from Iwagakure due to creative differences with village elders.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="art">
+  <div class="panel">
+    <h2>Art Attacks</h2>
+    <div class="attacks">
+      <div class="attack-card" data-attack="c1.png"> <img src="c1.png" alt="C1 Explosion"><h3>C1</h3><p>Fast clay creatures.</p></div>
+      <div class="attack-card" data-attack="c2.png"> <img src="c2.png" alt="C2 Explosion"><h3>C2</h3><p>Aerial dragon bombardment.</p></div>
+      <div class="attack-card" data-attack="c3.png"> <img src="c3.png" alt="C3 Explosion"><h3>C3</h3><p>Village-destroying blast.</p></div>
+      <div class="attack-card" data-attack="c4.png"> <img src="c4.png" alt="C4 Explosion"><h3>C4</h3><p>Microscopic annihilation.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="quote">“Art is an explosion.”</div>
+
+<section id="legacy">
+  <div class="panel">
+    <h2>Legacy</h2>
+    <p>Deidara's legacy culminates in his self-detonation during the Fourth Great Ninja War, a masterpiece of destruction. Facing Sasuke and Naruto, he chose explosive art over survival, leaving an indelible mark on the Naruto universe as a symbol of obsessive creativity. His philosophy that true beauty is ephemeral influenced many, and his techniques inspired fear and awe. Even in death, Deidara's art lived on, as his explosive clay was used in various battles, proving that his creations transcended his physical form. Fans remember him as one of the most eccentric and philosophical villains, whose rivalry with Sasuke highlighted themes of art versus power. Deidara's story serves as a reminder that art can be both beautiful and deadly, forever etching his name in the annals of ninja history.</p>
+    <br>
+    <p><strong>Notable Battles and Impact:</strong></p>
+    <ul>
+      <li>Clashed with Gaara and his team during the Chunin Exams arc.</li>
+      <li>Partnered with Sasori in the Akatsuki, showcasing explosive puppet combos.</li>
+      <li>Final stand against Sasuke and Naruto, detonating himself in a grand explosion.</li>
+      <li>Influenced ninja tactics with clay-based explosives, feared across villages.</li>
+      <li>Cultural icon: Represents the blend of creativity and destruction in anime lore.</li>
+    </ul>
+  </div>
+</section>
+
+<footer>Made By Hanna's Bf • ITACHI</footer>
+
+<div id="itachi-label">ITACHI</div>
+
+<script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+<script>
+  gsap.utils.toArray('.panel').forEach(p => {
+    gsap.to(p, { opacity: 1, y: 0, duration: 1, scrollTrigger: { trigger: p, start: 'top 80%' } });
+  });
+
+  // Home button functionality
+  document.getElementById('home-btn').addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>
